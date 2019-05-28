@@ -1,0 +1,9 @@
+{
+  "name": "tictactoe",
+  "version": "1.0.0",
+  "description": "Stupidly complex full stack Tic Tac Toe",
+  "main": "index.js",
+  "author": "birk.brauer@gmail.com",
+  "license": "MIT",
+  "private": true
+}

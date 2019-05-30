@@ -1,5 +1,5 @@
 {
-	"defaultSeverity": "error",
+	"defaultSeverity": "warning",
 	"extends": "tslint:recommended",
 	"jsRules": {
 		"max-line-length": [
@@ -7,15 +7,10 @@
 			170
 		],
 	},
-	"severity": "warning",
 	"rules": {
 		"semicolon": [
 			true
 		],
-		"ter-indent": [
-			false
-		],
-		"ter-arrow-parens": false,
 		"array-bracket-spacing": false,
 		"max-line-length": [
 			true,

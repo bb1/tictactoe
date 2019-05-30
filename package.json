@@ -7,6 +7,7 @@
   "license": "MIT",
   "private": true,
   "devDependencies": {
+    "tslint": "^5.16.0",
     "typescript": "^3.5.1"
   }
 }

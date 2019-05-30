@@ -1,10 +1,16 @@
 {
 	"defaultSeverity": "error",
-	"extends": "tslint-config-airbnb",
-	"jsRules": {},
+	"extends": "tslint:recommended",
+	"jsRules": {
+		"max-line-length": [
+			true,
+			170
+		],
+	},
+	"severity": "warning",
 	"rules": {
 		"semicolon": [
-			false
+			true
 		],
 		"ter-indent": [
 			false
@@ -13,7 +19,7 @@
 		"array-bracket-spacing": false,
 		"max-line-length": [
 			true,
-			150
+			170
 		],
 		"trailing-comma": [
 			false

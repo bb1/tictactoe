@@ -1,9 +1,10 @@
 import { Player } from "./player";
+import { Rules } from "./rules";
 
 export class Grid {
     grid: string[][];
 
-    constructor(private max_x = 3, private max_y = 3) {
+    constructor(private max_x = 3, private max_y = 3, private rules: Rules) {
         this.grid = new Array();
         while (this.grid.length - 1 < max_x) {
             this.grid.push(new Array(max_y));
@@ -16,6 +17,9 @@ export class Grid {
         }
         if (this.grid[x][y] !== null) {
             throw new Error('Already taken!');
+        }
+        if (this.rules.nextPlayer !== player) {
+            throw new Error('Not your turn!');
         }
         this.grid[x][y] = player.symbol;
     }

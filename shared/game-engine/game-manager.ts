@@ -1,13 +1,28 @@
 import { Player } from "./player";
 
-export class Rules {
+export interface SavedGameState {
+    /** to identify the game on the server/client */
+    gameId: number;
+    playerList: Player[];
+    nextPlayerIndex: number;
+}
+
+export class GameManager {
 
     private _playerList: Player[];
     private _nextPlayerIndex: number;
+    private _gameId: number;
 
-    constructor(private _playerCount = 2) {
-        this._playerList = [];
-        this._nextPlayerIndex = 0;
+    constructor(private _playerCount = 2, gameSave?: SavedGameState) {
+        if (gameSave) {
+            this._playerList = gameSave.playerList;
+            this._nextPlayerIndex = gameSave.nextPlayerIndex;
+            this._gameId = gameSave.gameId;
+            this._playerCount = gameSave.playerList.length;
+        } else {
+            this._playerList = [];
+            this._nextPlayerIndex = 0;
+        }
     }
 
     get playerCount() {
@@ -46,5 +61,13 @@ export class Rules {
         this._playerList.sort((a, b) => {
             return Math.random() < 0.5 ? -1 : 1;
         });
+    }
+
+    exportState(): SavedGameState {
+        return {
+            gameId: this._gameId,
+            playerList: this.playerList,
+            nextPlayerIndex: this._nextPlayerIndex,
+        }
     }
 }

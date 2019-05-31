@@ -13,8 +13,14 @@ export class GameManager {
     private readonly ALL_SYMBOLS = ['X', 'O', 'Z', 'N', 'P', 'V'];
     private readonly PRESET_COLORS = ['#fd5252', '#61dafb', '#60ff95', '#d8fd52', '#a252fd', '#23a323'];
 
+    /**
+     * Looks for a game with empty slots - if not create a new game
+     * @param name 
+     * @param playerCount 
+     * @param maxX 
+     * @param maxY 
+     */
     newPlayer(name: string, playerCount = 2, maxX = 3, maxY = 3) {
-        // look for game with empty slots - if not create a new game
         const availableGames = this.activeGames.filter(g => {
             if (g.playerList.maxPlayerCount > g.playerList.playerCount) {
                 return false; // game full

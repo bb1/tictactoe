@@ -1,2 +1,2 @@
 # tictactoe
-stupidly complex tic tac toe
+stupidly complex full stack tic tac toe example

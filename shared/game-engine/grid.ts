@@ -14,6 +14,7 @@ const relativePosition = {
 
 export class Grid {
     grid: string[][];
+    winningFields: number[][];
 
     constructor(private _maxX = 3, private _maxY = 3, private rules: GamePlayerList) {
         this.grid = new Array();
@@ -56,7 +57,8 @@ export class Grid {
             for (let i = 0; i < yAxis.length; i++) {
                 yAxis[i] = null;
             }
-        })
+        });
+        this.winningFields = null;
     }
 
     private checkBounds(x: number, y: number): boolean {
@@ -105,7 +107,7 @@ export class Grid {
                 }
             }
         }
-
+        this.winningFields = winningFields;
         return winningFields.length >= 3;
     }
 

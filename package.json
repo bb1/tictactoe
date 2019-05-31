@@ -3,11 +3,16 @@
   "version": "1.0.0",
   "description": "Stupidly complex full stack Tic Tac Toe",
   "main": "index.js",
-  "author": "birk.brauer@gmail.com",
+  "author": "bb1",
   "license": "MIT",
   "private": true,
   "devDependencies": {
     "tslint": "^5.16.0",
     "typescript": "^3.5.1"
+  },
+  "dependencies": {
+    "@types/socket.io-client": "^1.4.32",
+    "socket.io-client": "^2.2.0",
+    "ts-node": "^8.2.0"
   }
 }

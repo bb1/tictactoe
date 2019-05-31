@@ -13,20 +13,24 @@ export class GamePlayerList {
     private _nextPlayerIndex: number;
     private _gameId: number;
 
-    constructor(private _playerCount = 2, gameSave?: SavedGameState) {
+    constructor(private _maxPlayerCount = 2, gameSave?: SavedGameState) {
         if (gameSave) {
             this._playerList = gameSave.playerList;
             this._nextPlayerIndex = gameSave.nextPlayerIndex;
             this._gameId = gameSave.gameId;
-            this._playerCount = gameSave.playerList.length;
+            this._maxPlayerCount = gameSave.playerList.length;
         } else {
             this._playerList = [];
             this._nextPlayerIndex = 0;
         }
     }
 
+    get maxPlayerCount() {
+        return this._maxPlayerCount;
+    }
+
     get playerCount() {
-        return this._playerCount;
+        return this._playerList.length;
     }
 
     get playerList(): Player[] {
@@ -40,16 +44,15 @@ export class GamePlayerList {
         return nextPlayer;
     }
 
-    newPlayer(symbol: string, color?: string, name?: string) {
-        if (this._playerList.length >= this._playerCount) {
+    newPlayer(player: Player) {
+        if (this.playerCount >= this._maxPlayerCount) {
             throw new Error('Game already full!');
-            return;
         }
-        const matchingIdent = this._playerList.find(p => p.symbol === symbol || p.color === color);
+        const matchingIdent = this._playerList.find(p => p.symbol === player.symbol || p.color === player.color);
         if (matchingIdent) {
             throw new Error('Color or Symbol already taken!');
         }
-        this._playerList.push(new Player(symbol, color, name));
+        this._playerList.push(player);
     }
 
     kickPlayer(symbol: string) {

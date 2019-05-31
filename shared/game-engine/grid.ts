@@ -1,5 +1,5 @@
 import { Player } from "./player";
-import { GameManager } from "./game-manager";
+import { GamePlayerList } from "./game-player-list";
 
 const relativePosition = {
     TopLeft: [-1, 1],
@@ -15,7 +15,7 @@ const relativePosition = {
 export class Grid {
     grid: string[][];
 
-    constructor(private max_x = 3, private max_y = 3, private rules: GameManager) {
+    constructor(private max_x = 3, private max_y = 3, private rules: GamePlayerList) {
         this.grid = new Array();
         while (this.grid.length < max_x) {
             this.grid.push(new Array(max_y));

@@ -7,7 +7,7 @@ export interface SavedGameState {
     nextPlayerIndex: number;
 }
 
-export class GameManager {
+export class GamePlayerList {
 
     private _playerList: Player[];
     private _nextPlayerIndex: number;

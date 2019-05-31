@@ -15,11 +15,19 @@ const relativePosition = {
 export class Grid {
     grid: string[][];
 
-    constructor(private max_x = 3, private max_y = 3, private rules: GamePlayerList) {
+    constructor(private _maxX = 3, private _maxY = 3, private rules: GamePlayerList) {
         this.grid = new Array();
-        while (this.grid.length < max_x) {
-            this.grid.push(new Array(max_y));
+        while (this.grid.length < _maxX) {
+            this.grid.push(new Array(_maxY));
         }
+    }
+
+    get maxX() {
+        return this._maxX;
+    }
+
+    get maxY() {
+        return this._maxY;
     }
     
     /**
@@ -52,7 +60,7 @@ export class Grid {
     }
 
     private checkBounds(x: number, y: number): boolean {
-        return x >= 0 && x < this.max_x && y >= 0 && y < this.max_y;
+        return x >= 0 && x < this._maxX && y >= 0 && y < this._maxY;
     }
 
     /**

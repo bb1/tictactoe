@@ -2,7 +2,7 @@ import { Player } from "./player";
 
 export interface SavedGameState {
     /** to identify the game on the server/client */
-    gameId: number;
+    gameId: string;
     maxPlayerCount: number;
     playerList: Player[];
     nextPlayerIndex: number;
@@ -12,9 +12,9 @@ export class GamePlayerList {
 
     private _playerList: Player[];
     private _nextPlayerIndex: number;
-    private _gameId: number;
+    private _gameId: string;
 
-    constructor(private _maxPlayerCount = 2, gameSave?: SavedGameState) {
+    constructor(private _maxPlayerCount = 2, gameSave?: SavedGameState, gameId?: string) {
         if (gameSave) {
             this._playerList = gameSave.playerList;
             this._nextPlayerIndex = gameSave.nextPlayerIndex;
@@ -23,6 +23,7 @@ export class GamePlayerList {
         } else {
             this._playerList = [];
             this._nextPlayerIndex = 0;
+            this._gameId = gameId;
         }
     }
 
@@ -43,6 +44,10 @@ export class GamePlayerList {
         const nextPlayer = this._playerList[this._nextPlayerIndex++];
         this._nextPlayerIndex = this._playerList.length < this._nextPlayerIndex ? this._nextPlayerIndex : 0;
         return nextPlayer;
+    }
+
+    public get gameId(): string {
+        return this._gameId;
     }
 
     newPlayer(player: Player) {

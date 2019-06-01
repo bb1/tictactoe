@@ -38,8 +38,9 @@ export class GameManager {
             return true;
         });
         let joinedGame: ActiveGame;
+        let newPlayer: Player;
         for (const game of availableGames) {
-            const newPlayer = this.createPlayerForGame(name, game.playerList);
+            newPlayer = this.createPlayerForGame(name, game.playerList);
             try {
                 game.playerList.newPlayer(newPlayer);
                 joinedGame = game;
@@ -51,15 +52,21 @@ export class GameManager {
         }
         if (!joinedGame) {
             const playerList = new GamePlayerList(playerCount);
-            const newPlayer = this.createPlayerForGame(name, playerList);
+            newPlayer = this.createPlayerForGame(name, playerList);
             playerList.newPlayer(newPlayer);
             joinedGame = {
                 playerList,
                 grid: new Grid(maxX, maxY, playerList)
             }
         }
-        // TODO: notify clients
-        
+        return {
+            joinedGame,
+            newPlayer
+        };
+    }
+
+    leaveGame(symbol) {
+
     }
 
     /**

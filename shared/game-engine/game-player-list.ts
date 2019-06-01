@@ -3,6 +3,7 @@ import { Player } from "./player";
 export interface SavedGameState {
     /** to identify the game on the server/client */
     gameId: number;
+    maxPlayerCount: number;
     playerList: Player[];
     nextPlayerIndex: number;
 }
@@ -18,7 +19,7 @@ export class GamePlayerList {
             this._playerList = gameSave.playerList;
             this._nextPlayerIndex = gameSave.nextPlayerIndex;
             this._gameId = gameSave.gameId;
-            this._maxPlayerCount = gameSave.playerList.length;
+            this._maxPlayerCount = gameSave.maxPlayerCount;
         } else {
             this._playerList = [];
             this._nextPlayerIndex = 0;
@@ -61,7 +62,7 @@ export class GamePlayerList {
     }
 
     shufflePlayers() {
-        this._playerList.sort((a, b) => {
+        this._playerList.sort(() => {
             return Math.random() < 0.5 ? -1 : 1;
         });
     }
@@ -71,6 +72,7 @@ export class GamePlayerList {
             gameId: this._gameId,
             playerList: this.playerList,
             nextPlayerIndex: this._nextPlayerIndex,
+            maxPlayerCount: this.maxPlayerCount
         }
     }
 }

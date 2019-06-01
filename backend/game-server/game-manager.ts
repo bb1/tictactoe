@@ -1,6 +1,6 @@
-import { GamePlayerList } from "shared/game-engine/game-player-list";
-import { Grid } from "shared/game-engine/grid";
-import { Player } from "shared/game-engine/player";
+import { GamePlayerList } from "../../shared/game-engine/game-player-list";
+import { Grid } from "../../shared/game-engine/grid";
+import { Player } from "../../shared/game-engine/player";
 
 interface ActiveGame {
     playerList: GamePlayerList;

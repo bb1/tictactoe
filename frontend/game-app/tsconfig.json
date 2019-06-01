@@ -1,33 +1,48 @@
 {
-    "extends": "../../tsconfig.json",
-    "compilerOptions": {
-      "module": "es2015",
-      "target": "es2015",
-      "jsx": "react",
-      "rootDir": "../..",
-      "outDir": "../../dist/public",
-    },
-    "filesGlob": [
-      "typings/index.d.ts",
-      "src/**/*.ts",
-      "src/**/*.tsx",
-      "node_modules/typescript/lib/lib.es6.d.ts"
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "module": "esnext",
+    "target": "es2015",
+    "jsx": "preserve",
+    "rootDir": "../..",
+    "outDir": "../../dist/public",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
     ],
-    "exclude": [
-      "build",
-      "dist",
-      "node_modules",
-      "__tests__"
-    ],
-    "types": [
-      "node",
-      "webpack",
-      "react",
-      "react-dom",
-      "reactstrap"
-    ],
-    "include": [
-      "**/*.ts", "src/app.js"
-    ],
-    "compileOnSave": false
-  }
+    "allowJs": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "strict": false,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true
+  },
+  "filesGlob": [
+    "typings/index.d.ts",
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "node_modules/typescript/lib/lib.es6.d.ts"
+  ],
+  "exclude": [
+    "build",
+    "dist",
+    "node_modules",
+    "__tests__",
+    "*.test.ts"
+  ],
+  "types": [
+    "node",
+    "webpack",
+    "react",
+    "react-dom",
+    "reactstrap"
+  ],
+  "include": [
+    "**/*.ts",
+    "src/app.tsx", "src/components/field.tsx", "src/pages/playground.tsx", "src/pages/setup.tsx", "src/serviceWorker.js"
+  ],
+  "compileOnSave": false
+}

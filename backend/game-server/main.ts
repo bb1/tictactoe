@@ -4,6 +4,7 @@ import { Server } from 'http';
 import * as socket from 'socket.io';
 import { LiveStats } from 'shared/model/live-stats';
 import * as cors from 'cors';
+import { SocketManager } from './socket-manager';
 
 const app = express();
 const server = new Server(app);
@@ -12,8 +13,10 @@ const io = socket(server);
 const port = process.env.PORT || '8080'; // default port to listen
 
 const gameManager = new GameManager();
+const socketManager = new SocketManager(gameManager);
 
 server.on('listening', () => {
+    console.log('=========================================================');
     console.log(`listening on ${port}`);
 })
 
@@ -23,28 +26,9 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 // define a route handler for the default home page
-app.get( "/", ( _req, res ) => {
-    res.send( "Hello world!" );
-    //TODO: public route
-} );
+app.get( "/", express.static('public'));
 
-let openSocketCount = 0;
-io.on('connection', (socket) => {
-    socket.emit('stats', {
-        activeGames: gameManager.activeGames.length,
-        players: ++openSocketCount,
-    } as LiveStats);
-    socket.on('join', function (data) {
-        
-        console.log(data);
-    });
-});
-io.on('disconnect', () => {
-    io.emit('stats', {
-        activeGames: gameManager.activeGames.length,
-        players: --openSocketCount,
-    } as LiveStats);
-});
+socketManager.registerEvents(io);
 
 // start the server
 server.listen(parseInt(port));

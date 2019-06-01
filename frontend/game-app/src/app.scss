@@ -20,6 +20,15 @@
     h1 {
       font-size: 5rem;
       color: #60ff95;
+      margin: 0;
+    }
+
+    p {
+      margin: 0;
+      font-size: 0.8em;
+      span {
+        margin-right: 10px;
+      }
     }
 
     .App-link {

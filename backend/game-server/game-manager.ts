@@ -65,10 +65,6 @@ export class GameManager {
         };
     }
 
-    leaveGame(symbol) {
-
-    }
-
     /**
      * Creates a new player and assign a color and symbol that isn't picked yet
      */

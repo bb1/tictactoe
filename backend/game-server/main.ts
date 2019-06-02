@@ -2,9 +2,9 @@ import * as express from 'express';
 import { GameManager } from './game-manager';
 import { Server } from 'http';
 import * as socket from 'socket.io';
-import { LiveStats } from 'shared/model/live-stats';
 import * as cors from 'cors';
 import { SocketManager } from './socket-manager';
+import { join } from 'path';
 
 const app = express();
 const server = new Server(app);
@@ -26,7 +26,10 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 // define a route handler for the default home page
-app.get( "/", express.static('public'));
+app.get( "/", express.static(join(__dirname, 'public')));
+app.get("/*", function (req, res) {
+    res.sendFile(join(__dirname, 'public', 'index.html'));
+});
 
 socketManager.registerEvents(io);
 

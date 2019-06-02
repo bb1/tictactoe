@@ -1,8 +1,11 @@
 import React from 'react';
+import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import './app.scss';
 import logo from './tic_tac_toe.svg';
 import * as io from 'socket.io-client';
 import { LiveStats } from '../../../shared/model/live-stats';
+import { Setup } from './pages/setup';
+import { Game } from './pages/game';
 
 interface AppProps {
   stats: LiveStats;
@@ -11,8 +14,10 @@ interface AppProps {
 
 export default class App extends React.Component<{}, AppProps> {
 
+  socket: SocketIOClient.Socket;
+
   constructor(whatever = {}) {
-    super(whatever, {});
+    super(whatever);
     this.state = {
       stats: {
         activeGames: 0,
@@ -21,13 +26,26 @@ export default class App extends React.Component<{}, AppProps> {
       online: false
     };
 
-    const socket = io.connect(`http://localhost:8080`);
-    socket.on('connect', () => {
+    this.initiateWebSocketHooks();
+  }
+
+  initiateWebSocketHooks() {
+    this.socket = io.connect(`http://localhost:8080`);
+    this.socket.on('connect', () => {
       this.setState({
         online: true
       })
     });
-    socket.on('stats', (data: LiveStats) => {
+    this.socket.on('disconnect', () => {
+      this.setState({
+        online: false,
+        stats: {
+          activeGames: 0,
+          players: 0,
+        }
+      })
+    });
+    this.socket.on('stats', (data: LiveStats) => {
       this.setState({
         stats: data
       })
@@ -57,8 +75,13 @@ export default class App extends React.Component<{}, AppProps> {
             START
           </a> */}
         </header>
+        <Router>
+          <Route exact path="/" render={() => !this.state.online ? 'offline' : <Link to="/join" className="btn btn-success btn-lg badge-pill">Start 🕹</Link>}/>
+          <Route path="/join" component={Setup}/>
+          <Route path="/game" component={Game}/>
+        </Router>
         <section>
-          {!this.state.online ? '' : <h3>ON</h3>}
+
         </section>
       </div>
     );

@@ -42,7 +42,7 @@
   ],
   "include": [
     "**/*.ts",
-    "src/app.tsx", "src/components/field.tsx", "src/pages/playground.tsx", "src/pages/setup.tsx", "src/serviceWorker.js"
+    "src/app.tsx", "src/components/field.tsx", "src/components/tile.tsx", "src/pages/setup.tsx", "src/serviceWorker.js"
   ],
   "compileOnSave": false
 }

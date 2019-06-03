@@ -6,7 +6,7 @@ export enum PlayerSymbols {
 export class Player {
 
     constructor(private _symbol = 'X', private _color = '#60ff95', private _name = 'n00b') {
-        if (!/#\d{6}/.test(_color)) {
+        if (!/#[0-9a-fA-F]{6}/.test(_color)) {
             throw new Error('Invalid color!');
         }
     }

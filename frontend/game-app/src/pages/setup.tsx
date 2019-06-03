@@ -2,7 +2,7 @@ import * as React from "react";
 import { Link } from "react-router-dom";
 import { PlayerSetup } from '../../../../shared/model/player-setup';
 
-export class Setup extends React.Component<{}, PlayerSetup> {
+export class Setup extends React.Component<{setPlayerConfig: (config: PlayerSetup) => void}, PlayerSetup> {
   constructor(props: any) {
     super(props);
     this.state = {
@@ -14,21 +14,26 @@ export class Setup extends React.Component<{}, PlayerSetup> {
     this.handleChangeName = this.handleChangeName.bind(this);
     this.handleChangeSize = this.handleChangeSize.bind(this);
     this.handleChangePlayer = this.handleChangePlayer.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleChangeName(event: React.ChangeEvent) {
-    let value = (event.target as HTMLInputElement).value;
+  handleChangeName(event: React.ChangeEvent<HTMLInputElement>) {
+    let value = event.target.value;
     this.setState({name: value});
   }
 
-  handleChangeSize(event: React.ChangeEvent) {
-    let value = parseInt( (event.target as HTMLInputElement).value, 10);
+  handleChangeSize(event: React.ChangeEvent<HTMLInputElement>) {
+    let value = parseInt(event.target.value, 10);
     this.setState({gridSize: value});
   }
 
-  handleChangePlayer(event: React.ChangeEvent) {
-    let value = parseInt((event.target as HTMLInputElement).value, 10);
+  handleChangePlayer(event: React.ChangeEvent<HTMLSelectElement>) {
+    let value = parseInt(event.target.value, 10);
     this.setState({playerCount: value});
+  }
+
+  handleSubmit(event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) {
+    this.props.setPlayerConfig(this.state);
   }
 
   render() {
@@ -50,10 +55,7 @@ export class Setup extends React.Component<{}, PlayerSetup> {
             <option value="4">4</option>
           </select>
         </div>
-        <Link to={{
-          pathname: "/game",
-          state: this.state
-        }} className="btn btn-success btn-lg badge-pill">search game 🔍</Link>
+        <Link to="/game" onClick={this.handleSubmit} className="btn btn-success btn-lg badge-pill">search game 🔍</Link>
       </div>
     );
   }

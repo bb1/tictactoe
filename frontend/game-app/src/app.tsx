@@ -6,15 +6,17 @@ import * as io from 'socket.io-client';
 import { LiveStats } from '../../../shared/model/live-stats';
 import { Setup } from './pages/setup';
 import { Game } from './pages/game';
+import { PlayerSetup } from 'shared/model/player-setup';
 
 interface AppState {
   stats: LiveStats;
   online: boolean;
+  playerConfig: PlayerSetup;
 }
 
 export default class App extends React.Component<{}, AppState> {
 
-  socket: SocketIOClient.Socket;
+  readonly socket: SocketIOClient.Socket;
 
   constructor(whatever = {}) {
     super(whatever);
@@ -23,14 +25,17 @@ export default class App extends React.Component<{}, AppState> {
         activeGames: 0,
         players: 0,
       },
-      online: false
+      online: false,
+      playerConfig: null,
     };
 
+    this.socket = io.connect(`http://localhost:8080`);
     this.initiateWebSocketHooks();
+    
+    this.setPlayerConfig = this.setPlayerConfig.bind(this);
   }
 
   initiateWebSocketHooks() {
-    this.socket = io.connect(`http://localhost:8080`);
     this.socket.on('connect', () => {
       this.setState({
         online: true
@@ -49,6 +54,12 @@ export default class App extends React.Component<{}, AppState> {
       this.setState({
         stats: data
       })
+    })
+  }
+
+  setPlayerConfig(config: PlayerSetup) {
+    this.setState({
+      playerConfig: config
     })
   }
 
@@ -77,8 +88,9 @@ export default class App extends React.Component<{}, AppState> {
         </header>
         <Router>
           <Route exact path="/" render={() => !this.state.online ? 'offline' : <Link to="/join" className="btn btn-success btn-lg badge-pill">Start 🕹</Link>}/>
-          <Route path="/join" component={Setup}/>
-          <Route path="/game" component={Game}/>
+          {/* <Route path="/join" component={Setup}/> */}
+          <Route path="/join" render={() => <Setup setPlayerConfig={this.setPlayerConfig}/>}/>
+          <Route path="/game" render={() => <Game playerConfig={this.state.playerConfig} websocket={this.socket}/>}/>
         </Router>
         <section>
 

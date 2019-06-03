@@ -37,6 +37,10 @@ export class SocketManager {
             socket.on('disconnect', (reason: string) => {
                 game.joinedGame.playerList.kickPlayer(game.newPlayer.symbol);
                 gameChannel.emit('stateUpdate', game.joinedGame.playerList.exportState);
+                io.emit('stats', {
+                    activeGames: this.gameManager.activeGames.length,
+                    players: --this.openSocketCount,
+                } as LiveStats);
             });
             socket.join(`/game/${game.joinedGame.playerList.gameId}`, () => {
                 gameChannel.emit('stateUpdate', game.joinedGame.playerList.exportState);

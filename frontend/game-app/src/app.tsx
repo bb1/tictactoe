@@ -7,12 +7,12 @@ import { LiveStats } from '../../../shared/model/live-stats';
 import { Setup } from './pages/setup';
 import { Game } from './pages/game';
 
-interface AppProps {
+interface AppState {
   stats: LiveStats;
   online: boolean;
 }
 
-export default class App extends React.Component<{}, AppProps> {
+export default class App extends React.Component<{}, AppState> {
 
   socket: SocketIOClient.Socket;
 

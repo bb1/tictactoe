@@ -31,8 +31,15 @@ export class SocketManager {
 
     registerSingleClientEvents(socket: socket.Socket, io: socket.Server) {
         socket.on('join', (data: PlayerSetup, callback: Function) => {
-            console.log(data);
             const game = this.gameManager.newPlayer(data.name, data.playerCount, data.gridSize, data.gridSize);
+            console.info(`Player ${game.newPlayer.name} (${game.newPlayer.symbol}) joined the game ${game.joinedGame.playerList.gameId}`);
+            const missingPlayers = game.joinedGame.playerList.maxPlayerCount - game.joinedGame.playerList.playerCount;
+            if (missingPlayers) {
+                console.info(` waiting for ${game.joinedGame.playerList.playerCount}`);
+            } else {
+                console.info(`STARTING!`);
+                game.joinedGame.playerList.shufflePlayers();
+            }
             const gameChannel = io.of(`/game/${game.joinedGame.playerList.gameId}`);
             socket.on('disconnect', (reason: string) => {
                 game.joinedGame.playerList.kickPlayer(game.newPlayer.symbol);

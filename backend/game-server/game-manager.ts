@@ -13,6 +13,8 @@ export class GameManager {
     private readonly ALL_SYMBOLS = ['X', 'O', 'Z', 'N', 'P', 'V'];
     private readonly PRESET_COLORS = ['#fd5252', '#61dafb', '#60ff95', '#d8fd52', '#a252fd', '#23a323'];
 
+    private gameCounter = 0;
+
     constructor() {
         this.activeGames = [];
     }
@@ -51,7 +53,7 @@ export class GameManager {
             }
         }
         if (!joinedGame) {
-            const playerList = new GamePlayerList(playerCount);
+            const playerList = new GamePlayerList(playerCount, null, this.gameCounter++);
             newPlayer = this.createPlayerForGame(name, playerList);
             playerList.newPlayer(newPlayer);
             joinedGame = {

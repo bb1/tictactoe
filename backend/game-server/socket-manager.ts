@@ -31,28 +31,51 @@ export class SocketManager {
 
     registerSingleClientEvents(socket: socket.Socket, io: socket.Server) {
         socket.on('join', (data: PlayerSetup, callback: Function) => {
-            const game = this.gameManager.newPlayer(data.name, data.playerCount, data.gridSize, data.gridSize);
-            console.info(`Player ${game.newPlayer.name} (${game.newPlayer.symbol}) joined the game ${game.joinedGame.playerList.gameId}`);
-            const missingPlayers = game.joinedGame.playerList.maxPlayerCount - game.joinedGame.playerList.playerCount;
-            if (missingPlayers) {
-                console.info(` waiting for ${game.joinedGame.playerList.playerCount}`);
+            const {joinedGame, newPlayer} = this.gameManager.newPlayer(data.name, data.playerCount, data.gridSize, data.gridSize);
+            let logMsg = `Player ${newPlayer.name} (${newPlayer.symbol}) joined the game ${joinedGame.playerList.gameId}`;
+            const missingPlayers = joinedGame.playerList.maxPlayerCount - joinedGame.playerList.playerCount;
+            if (missingPlayers > 0) {
+                logMsg += ` waiting for ${missingPlayers} players`;
             } else {
-                console.info(`STARTING!`);
-                game.joinedGame.playerList.shufflePlayers();
+                logMsg += ` STARTING the game!`;
+                joinedGame.playerList.shufflePlayers();
             }
-            const gameChannel = io.of(`/game/${game.joinedGame.playerList.gameId}`);
+            console.info(logMsg);
+            // join game channel
+            const gameChannel = io.of(`/game/${joinedGame.playerList.gameId}`);
+            socket.join(`/game/${joinedGame.playerList.gameId}`, () => {
+                gameChannel.emit('stateUpdate', joinedGame.playerList.exportState());
+            });
+            // ingame events:
             socket.on('disconnect', (reason: string) => {
-                game.joinedGame.playerList.kickPlayer(game.newPlayer.symbol);
-                gameChannel.emit('stateUpdate', game.joinedGame.playerList.exportState());
+                joinedGame.playerList.kickPlayer(newPlayer.symbol);
+                gameChannel.emit('stateUpdate', joinedGame.playerList.exportState());
                 io.emit('stats', {
                     activeGames: this.gameManager.activeGames.length,
                     players: --this.openSocketCount,
                 } as LiveStats);
             });
-            socket.join(`/game/${game.joinedGame.playerList.gameId}`, () => {
-                gameChannel.emit('stateUpdate', game.joinedGame.playerList.exportState());
+            socket.on('place', ({x, y}, callback: (args: any) => void) => {
+                if (joinedGame.playerList.nextPlayer === newPlayer) {
+                    callback('forbidden');
+                    return;
+                }
+                if (joinedGame.playerList.maxPlayerCount === joinedGame.playerList.playerCount) {
+                    callback('game not full');
+                    return;
+                }
+                try {
+                    const won = joinedGame.grid.playerAction(x, y, newPlayer);
+                    gameChannel.emit('place', {x, y, player: newPlayer.symbol});
+                    if (won) {
+                        gameChannel.emit('winner', {player: newPlayer.symbol});
+                        this.gameManager.removeGame(joinedGame.playerList.gameId);
+                    }
+                } catch (e) {
+                    callback(e.message);
+                }
             });
-            callback(game.newPlayer);
+            callback(newPlayer);
         });
     }
 }

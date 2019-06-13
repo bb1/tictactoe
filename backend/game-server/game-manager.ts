@@ -77,4 +77,11 @@ export class GameManager {
         const newColor = this.PRESET_COLORS.filter(s => !otherPlayerColors.includes(s))[0];
         return new Player(newSymbol, newColor, name);
     }
+
+    removeGame(gameId: number) {
+        const index = this.activeGames.findIndex(g => g.playerList.gameId === gameId);
+        if (index) {
+            this.activeGames.splice(index, 1);
+        }
+    }
 }
